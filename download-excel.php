@@ -68,11 +68,6 @@ class DOWNLOAD_EXCEL
     $widths = array(40,20,50);
     $col_options = array('widths'=>$widths);
 
-    $writer->writeSheetHeader('Sheet1', $header, $col_options );
-    foreach($data as $row)
-	    $writer->writeSheetRow('Sheet1', $row  );
-    $writer->writeToFile($fileLocation);
-
     // Clear any previous output (otherwise the generated file will be corrupted)
     ob_end_clean();
 
@@ -86,8 +81,15 @@ class DOWNLOAD_EXCEL
     header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
     header('Content-Length: ' . filesize($fileLocation));
 
-    // ob_clean();
-    // flush();
+    
+    $writer->writeSheetHeader('Sheet1', $header, $col_options );
+    foreach($data as $row)
+	    $writer->writeSheetRow('Sheet1', $row  );
+    $writer->writeToFile($fileLocation);
+
+    ob_clean();
+    flush();
+
 
     readfile($fileLocation);
     unlink($fileLocation);
