@@ -59,7 +59,7 @@ class DOWNLOAD_EXCEL
           
           $postPermalink = get_permalink();
 
-          $data[] = array("$title", $modifiedDate, "$postPermalink");
+          $data[] = array("$title", 'test', "$postPermalink");
       }
   } 
 
@@ -68,8 +68,11 @@ class DOWNLOAD_EXCEL
     $widths = array(40,20,50);
     $col_options = array('widths'=>$widths);
 
-    // Clear any previous output (otherwise the generated file will be corrupted)
-    ob_end_clean();
+    $writer->writeSheetHeader('Sheet1', $header, $col_options );
+    foreach($data as $row)
+	    $writer->writeSheetRow('Sheet1', $row  );
+    $writer->writeToFile($fileLocation);
+
 
     // # prompt download popup
     header('Content-Description: File Transfer');
@@ -81,15 +84,8 @@ class DOWNLOAD_EXCEL
     header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
     header('Content-Length: ' . filesize($fileLocation));
 
-    
-    $writer->writeSheetHeader('Sheet1', $header, $col_options );
-    foreach($data as $row)
-	    $writer->writeSheetRow('Sheet1', $row  );
-    $writer->writeToFile($fileLocation);
-
     ob_clean();
     flush();
-
 
     readfile($fileLocation);
     unlink($fileLocation);
