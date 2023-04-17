@@ -3,7 +3,7 @@
  * Plugin Name: CAHNRS Pods Roles
  * Plugin URI: 
  * Description: This plugin changes some of the roles for the Pods plugin
- * Version: 1.2.5
+ * Version: 1.2.6
  * Author: Washington State University | CAHNRS Communications
  * Author URI: http://cahnrs.wsu.edu/communications
  */
@@ -63,7 +63,7 @@ add_action('before_delete_post', 'update_fact_sheet_revision_date', 10, 1);
 
 require_once 'download-excel.php';
 
-//add_action( 'admin_menu', 'create_custom_post_type_settings_page' );
+add_action( 'admin_menu', 'create_custom_post_type_settings_page' );
 
 function create_custom_post_type_settings_page() {
     add_submenu_page(

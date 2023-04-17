@@ -73,6 +73,8 @@ class DOWNLOAD_EXCEL
 	    $writer->writeSheetRow('Sheet1', $row  );
     $writer->writeToFile($fileLocation);
 
+    // Clear any previous output (otherwise the generated file will be corrupted)
+    ob_end_clean();
 
     // # prompt download popup
     header('Content-Description: File Transfer');
@@ -84,8 +86,8 @@ class DOWNLOAD_EXCEL
     header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
     header('Content-Length: ' . filesize($fileLocation));
 
-    ob_clean();
-    flush();
+    // ob_clean();
+    // flush();
 
     readfile($fileLocation);
     unlink($fileLocation);
