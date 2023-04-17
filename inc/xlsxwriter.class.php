@@ -72,6 +72,10 @@ class XLSXWriter
 	{
 		$temp_file = $this->tempFilename();
 		self::writeToFile($temp_file);
+
+		// Clear any previous output (otherwise the generated file will be corrupted)
+		ob_end_clean();
+	
 		readfile($temp_file);
 	}
 

@@ -63,7 +63,7 @@ add_action('before_delete_post', 'update_fact_sheet_revision_date', 10, 1);
 
 require_once 'download-excel.php';
 
-add_action( 'admin_menu', 'create_custom_post_type_settings_page' );
+//add_action( 'admin_menu', 'create_custom_post_type_settings_page' );
 
 function create_custom_post_type_settings_page() {
     add_submenu_page(
