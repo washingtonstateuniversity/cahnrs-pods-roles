@@ -35,7 +35,7 @@ class DOWNLOAD_EXCEL
         'orderby' => 'modified',
         'date_query'    => array(
           'column'  => 'post_modified',
-          'after'   => '- 365 days'
+          'after'   => '-365 days'
         )
     );
 
@@ -68,7 +68,7 @@ class DOWNLOAD_EXCEL
     $widths = array(40,20,50);
     $col_options = array('widths'=>$widths);
 
-    $writer->writeSheetHeader('Sheet1', $header, $widths );
+    $writer->writeSheetHeader('Sheet1', $header, $col_options );
     foreach($data as $row)
 	    $writer->writeSheetRow('Sheet1', $row  );
     $writer->writeToFile($fileLocation);
