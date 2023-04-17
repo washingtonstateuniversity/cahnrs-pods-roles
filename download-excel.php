@@ -26,7 +26,7 @@ class DOWNLOAD_EXCEL
     $today = date('Y');
    
     // # set the destination file
-    $fileLocation = "$today Revised Factsheets.xls";
+    $fileLocation = "$today Revised Factsheets.xlsx";
 
     
     $post_args = array( 
