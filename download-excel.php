@@ -1,4 +1,13 @@
-<?php 
+<?php
+
+/**
+ * Plugin Name: Download data as excel
+ * Description: Download data as excel
+ * Version: 1.0
+ * Author: Apple Rinquest
+ * Author URI: https://applerinquest.com
+ */
+
 class DOWNLOAD_EXCEL
 {
   function __construct()
@@ -23,53 +32,22 @@ class DOWNLOAD_EXCEL
       include_once('inc/xlsxwriter.class.php');
     }
 
-    $today = date('Y');
-   
     // # set the destination file
-    $fileLocation = "$today Revised Factsheets.xlsx";
+    $fileLocation = 'output.xlsx';
 
-    
-    $post_args = array( 
-        'post_type' => 'fact_sheet',
-        'posts_per_page' => -1,
-        'orderby' => 'modified',
-        'date_query'    => array(
-          'column'  => 'post_modified',
-          'after'   => '-365 days'
-        )
+    // # prepare the data set
+    $data = array(
+      array('year', 'month', 'amount'),
+      array('2003', '1', '220'),
+      array('2003', '2', '153.5'),
     );
-
-    $fact_sheet_query = new WP_Query($post_args);
-    
-    $header = array(
-      'Name'=>'string',
-      'Modified Date'=>'date',
-      'Link'=>'string',
-    );
-    
-    
-    
-    if($fact_sheet_query->have_posts()){
-      while($fact_sheet_query->have_posts()){
-          $fact_sheet_query->the_post();
-
-          
-          $title = get_the_title();
-          $modifiedDate = get_the_modified_date('Y-m-d');
-          
-          $postPermalink = get_permalink();
-
-          $data[] = array("$title", "$modifiedDate", "$postPermalink");
-      }
-  } 
 
     // # call the class and generate the excel file from the $data
     $writer = new XLSXWriter();
-    $widths = array(40,20,50);
-    $col_options = array('widths'=>$widths);
+    $writer->writeSheet($data);
+    $writer->writeToFile($fileLocation);
 
-    //ob_end_clean();
-    
+
     // # prompt download popup
     header('Content-Description: File Transfer');
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -79,11 +57,6 @@ class DOWNLOAD_EXCEL
     header("Pragma: public");
     header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
     header('Content-Length: ' . filesize($fileLocation));
-
-    $writer->writeSheetHeader('Sheet1', $header, $col_options );
-    foreach($data as $row)
-	    $writer->writeSheetRow('Sheet1', $row  );
-    $writer->writeToFile($fileLocation);
 
     ob_clean();
     flush();
@@ -96,4 +69,3 @@ class DOWNLOAD_EXCEL
 
 // # initialize the class
 new DOWNLOAD_EXCEL();
-?>
