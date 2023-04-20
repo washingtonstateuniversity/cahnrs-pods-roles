@@ -1,54 +1,76 @@
-<?php
-
-/**
- * Plugin Name: Download data as excel
- * Description: Download data as excel
- * Version: 1.0
- * Author: Apple Rinquest
- * Author URI: https://applerinquest.com
- */
-
-class DOWNLOAD_EXCEL
-{
-  function __construct()
-  {
-    // I use the download feature on the frontend so I use the init action hook.
-    // If you use the download feature on the backend, you will use the admin_init action hook.
+<?php 
+class DOWNLOAD_EXCEL {
+  function __construct(){
     add_action('init', array($this, 'print_excel'));
   }
 
 
-  function print_excel()
-  {
+  function print_excel(){
 
-    // # check the URL in order to perform the downloading
+    // Check the URL in order to perform the downloading
     if (!isset($_GET['excel']) || !isset($_GET['download_excel'])) {
       return false;
     }
 
 
-    // # check the XLSXWriter class is already loaded or not. If it is not loaded yet, we will load it.
+    // Check the XLSXWriter class is already loaded or not.
     if (!class_exists('XLSXWriter')) {
       include_once('inc/xlsxwriter.class.php');
     }
 
-    // # set the destination file
-    $fileLocation = 'output.xlsx';
+    // Get today's date
+    $today = date('Y');
+   
+    // Set the name file
+    $fileLocation = "$today Revised Factsheets.xlsx";
 
-    // # prepare the data set
-    $data = array(
-      array('year', 'month', 'amount'),
-      array('2003', '1', '220'),
-      array('2003', '2', '153.5'),
+    // Get parameters for the query
+    $post_args = array( 
+        'post_type' => 'fact_sheet',
+        'posts_per_page' => -1,
+        'orderby' => 'modified',
+        'date_query'    => array(
+          'column'  => 'post_modified',
+          'after'   => '-365 days'
+        )
     );
 
-    // # call the class and generate the excel file from the $data
+    // Run WordPress Query
+    $fact_sheet_query = new WP_Query($post_args);
+    
+    // Create headers for Excel file
+    $header = array(
+      'Name'=>'string',
+      'Modified Date'=>'date',
+      'Link'=>'string',
+    );
+    
+
+    // Run the WP_Query and retrieve the facts sheets
+    if($fact_sheet_query->have_posts()){
+      while($fact_sheet_query->have_posts()){
+          $fact_sheet_query->the_post();
+      
+          $title = get_the_title();
+          $modifiedDate = get_the_modified_date('Y-m-d');
+          
+          $postPermalink = get_permalink();
+
+          $data[] = array($title, $modifiedDate, $postPermalink);
+      }
+  } 
+
+    // Call the class and generate the excel file from the $data
     $writer = new XLSXWriter();
-    $writer->writeSheet($data);
+    $widths = array(40,20,50);
+    $col_options = array('widths'=>$widths);
+
+    $writer->writeSheetHeader('Sheet1', $header, $col_options );
+    foreach($data as $row)
+	    $writer->writeSheetRow('Sheet1', $row  );
     $writer->writeToFile($fileLocation);
 
-
-    // # prompt download popup
+    // Prompt download popup
     header('Content-Description: File Transfer');
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     header("Content-Disposition: attachment; filename=" . basename($fileLocation));
@@ -67,5 +89,5 @@ class DOWNLOAD_EXCEL
   }
 }
 
-// # initialize the class
+// Initialize the class
 new DOWNLOAD_EXCEL();
