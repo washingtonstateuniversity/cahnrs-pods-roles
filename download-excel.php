@@ -73,6 +73,8 @@ class DOWNLOAD_EXCEL {
     // Prompt download popup
     header('Content-Description: File Transfer');
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    header('Access-Control-Allow-Methods: GET'); 
+    header('Access-Control-Allow-Origin: *');
     header("Content-Disposition: attachment; filename=" . basename($fileLocation));
     header("Content-Transfer-Encoding: binary");
     header("Expires: 0");
