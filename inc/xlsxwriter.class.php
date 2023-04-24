@@ -977,7 +977,4 @@ class XLSXWriter_BuffererWriter
 		return preg_match("//u", $string) ? true : false;
 	}
 }
-
-
-
 // vim: set filetype=php expandtab tabstop=4 shiftwidth=4 autoindent smartindent:
