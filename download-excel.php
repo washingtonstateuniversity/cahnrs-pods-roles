@@ -22,7 +22,7 @@ class DOWNLOAD_EXCEL {
     $today = date('Y');
    
     // Set the name file
-    $fileLocation = "$today Revised Factsheets.xlsx";
+    $fileLocation = "$today Revised Factsheets.csv";
 
     // Get parameters for the query
     $post_args = array( 
