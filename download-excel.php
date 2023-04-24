@@ -36,7 +36,7 @@ class DOWNLOAD_EXCEL {
     );
 
     // Run WordPress Query
-    $fact_sheet_query = new \WP_Query($post_args);
+    $fact_sheet_query = new WP_Query($post_args);
     
     // Create headers for Excel file
     $header = array(
