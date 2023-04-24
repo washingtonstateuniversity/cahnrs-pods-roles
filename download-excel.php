@@ -2,8 +2,7 @@
   function __construct(){
     add_action('init', array($this, 'print_excel'));
   }
-
-
+  
   function print_excel(){
 
     // Check the URL in order to perform the downloading
@@ -42,8 +41,12 @@
   // Run WordPress Query
   $fact_sheet_query = new WP_Query($post_args);
   
- 
-  
+  // Create headers for Excel file
+  $header = array(
+    'Name'=>'string',
+    'Modified Date'=>'date',
+    'Link'=>'string',
+  );
 
   // Run the WP_Query and retrieve the facts sheets
   if($fact_sheet_query->have_posts()){
@@ -60,9 +63,13 @@
 } 
 
     $writer = new XLSXWriter();
-    $writer->setAuthor('Some Author'); 
+    
+    $widths = array(40,20,50);
+    $styles1 = array( 'font'=>'Arial','font-size'=>12, 'color'=>'#ffffff', 'font-style'=>'bold', 'fill'=>'#A60F2D', 'widths'=>$widths);
+    $col_options = array('widths'=>$widths);
+    $writer->writeSheetHeader('Sheet1', $header, $styles1  );
     foreach($rows as $row)
-      $writer->writeSheetRow('Sheet1', $row);
+      $writer->writeSheetRow('Sheet1', $row, $row_options = array('wrap_text'=>true));
     $writer->writeToStdOut();
     //$writer->writeToFile($filename);
     //echo $writer->writeToString();
