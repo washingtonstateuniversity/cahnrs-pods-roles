@@ -3,7 +3,7 @@
  * Plugin Name: CAHNRS Pods Roles
  * Plugin URI: 
  * Description: This plugin changes some of the roles for the Pods plugin
- * Version: 1.2.19
+ * Version: 1.2.20
  * Author: Washington State University | CAHNRS Communications
  * Author URI: http://cahnrs.wsu.edu/communications
  */
@@ -135,7 +135,6 @@ function custom_post_type_settings_page() {
               echo "<tr>";
               echo "<td style='padding: 0.3rem 1.5rem .3rem .3rem;border: 1px solid #b3b3b3;border-collapse: collapse;'><a href='" . get_the_permalink() . "'>". get_the_title(). "</a></td>";
               echo "<td style='padding: 0.3rem 1.5rem;border: 1px solid #b3b3b3;border-collapse: collapse;'>" . get_the_modified_date() . "</td>";
-              echo "<td style='padding: 0.3rem 1.5rem;border: 1px solid #b3b3b3;border-collapse: collapse;'>" . get_the_ID() . "</td>";
               echo "</tr>";
           }
       } ?>
