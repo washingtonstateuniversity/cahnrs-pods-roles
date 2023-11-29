@@ -27,15 +27,17 @@
     header('Cache-Control: must-revalidate');
     header('Pragma: public');
 
-  // Get parameters for the query
-  $post_args = array( 
-    'post_type' => 'fact_sheet',
-    'posts_per_page' => -1,
-    'orderby' => 'modified',
-    'date_query'    => array(
-      'column'  => 'post_modified',
-      'after'   => '-365 days'
-    )
+    $today = strtotime(date('Y-m-d'));
+  
+    $post_args = array( 
+      'post_type'      => 'fact_sheet',
+      //'nopaging'      => true,
+      'posts_per_page' => -1,
+      'orderby'        => 'modified',
+      'date_query'     => array(
+              'column' => 'post_modified', 
+              'after'  => date('Y-m-d H:i:s', strtotime('-1 year', $today)),
+      ),
   );
 
   // Run WordPress Query

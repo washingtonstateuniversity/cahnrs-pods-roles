@@ -3,7 +3,7 @@
  * Plugin Name: CAHNRS Pods Roles
  * Plugin URI: 
  * Description: This plugin changes some of the roles for the Pods plugin
- * Version: 1.2.3.1
+ * Version: 1.3.2
  * Author: Washington State University | CAHNRS Communications
  * Author URI: http://cahnrs.wsu.edu/communications
  */
@@ -94,17 +94,18 @@ function custom_post_type_settings_page() {
   $get_vars_excel['excel'] = true;
   $get_vars_excel['download_excel'] = true;
   $excel_url = site_url() . '?' . http_build_query($get_vars_excel);
-  $today = getdate();
-    $args = array( 
-        'post_type' => 'fact_sheet',
-        //'nopaging' => true,
-        'posts_per_page' => -1,
-        'orderby' => 'modified',
-        'date_query'    => array(
-          'column'  => 'post_modified',
-          'after'   => '-365 days'
-        )
-    );
+  $today = strtotime(date('Y-m-d'));
+  
+  $args = array( 
+    'post_type'      => 'fact_sheet',
+    //'nopaging'      => true,
+    'posts_per_page' => -1,
+    'orderby'        => 'modified',
+    'date_query'     => array(
+            'column' => 'post_modified', 
+            'after'  => date('Y-m-d H:i:s', strtotime('-1 year', $today)),
+    ),
+  );
 
     $fact_sheet_query = new WP_Query($args);
   ?> 
